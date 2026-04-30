@@ -1,0 +1,77 @@
+---
+title: "Mental Health in Newfoundland and Labrador"
+author: "John W"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+# Introduction
+
+This notebook studies a data set on self-reported mental health of Canadian citizens, published
+online by the Government of Canada. The data set is available for download [here.](https://open.canada.ca/data/en/dataset/480a161e-56c6-4a86-869c-e38381b329a5)
+The purpose of this notebook is to determine how citizens of Newfoundland and Labrador rate their own mental health.
+
+## Analysis
+
+```{r}
+  library(tidyverse)
+  library(viridis)
+  library(janitor)
+  
+  data <- read.csv("13100085.csv")
+  data <- clean_names(data)
+  
+  df <- data %>%
+    filter(
+      age_group != "Total, 12 years and over",
+      sex != "Both sexes",
+      geo == "Newfoundland and Labrador",
+      characteristics == "Number of persons",
+      !grepl("Total population", self_rated_mental_health, ignore.case = TRUE),
+      self_rated_mental_health != "Very good or excellent self-rated mental health"
+    )
+  
+  palette <- viridis(length(unique(df$self_rated_mental_health)))
+
+  male <- df %>% filter(sex == "Males")
+  
+  ggplot(male, aes(x = age_group, y = value, fill = self_rated_mental_health)) +
+    geom_bar(stat = "identity") +
+    scale_fill_manual(values = palette) +
+    labs(
+      title = "Self-Rated Mental Health by Age Group (Males)",
+      subtitle="Newfoundland and Labrador",
+      x = "Age Group",
+      y = "Number of Persons",
+      fill = "Mental Health"
+    ) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1)
+    )
+  
+  female <- df %>% filter(sex == "Females")
+  
+  ggplot(female, aes(x = age_group, y = value, fill = self_rated_mental_health)) +
+    geom_bar(stat = "identity") +
+    scale_fill_manual(values = palette) +
+    labs(
+      title = "Self-Rated Mental Health by Age Group (Females)",
+      subtitle = "Newfoundland and Labrador",
+      x = "Age Group",
+      y = "Number of Persons",
+      fill = "Mental Health"
+    ) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1)
+    )
+```
+
+Males in Newfoundland and Labrador generally have a positive mental health outlook. The vast majority of respondents across all age groups report their mental health as being between good and excellent, with few (if any) individuals rating their mental health as fair or poor. The 65 and over age group notably has a number of non-respondents. Generally, however, the outlook of males in the province is a positive one. The smallest number of respondents came from the 12-19 age group, whereas the largest number of respondents came from the 45-64 age group, indicating a strong concentration of responses among middle-aged respondents.
+
+Similarly, females seem to have a generally positive mental health outlook. The vast majority of females in the province report their mental health as being good, very good or excellent. However, a disparity exists in the 45-64 and 65 and over age groups, in which there are a number of respondents who report their mental health as being fair or poor. This could potentially indicate a decline in mental health outlook with age. As in the case of males, the smallest number of respondents came from the 12-19 age group, with the largest number of respondents from the 45-64 age group.
+
+# Conclusion
+
+Overall, mental health outlook in Newfoundland and Labrador is generally positive for both males and females. Most respondents across all age groups report their mental health as good, very good or excellent. Few individuals report fair or poor mental health, particularly among males. A potential age-related decline in mental health is observed among females aged 45-64 and 65+. The 12-19 age group consistently has the lowest number of respondents for both sexes. In contrast the 45-64 age group has the highest number of respondents, indicating a strong middle-aged representation in the dataset. Overall, the finding suggest a predominantly positive mental health profile, with some age-related variation that may require further investigation.

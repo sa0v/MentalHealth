@@ -53,7 +53,7 @@ The purpose of this notebook is to provide a general survey of mental health in 
     scale_fill_manual(values = palette) +
     labs(
       title = "Self-Rated Mental Health by Age Group (Males)",
-      subtitle="Newfoundland and Labrador",
+      subtitle="Newfoundland and Labrador (2005)",
       x = "Age Group",
       y = "Number of Persons",
       fill = "Mental Health"
@@ -70,7 +70,7 @@ The purpose of this notebook is to provide a general survey of mental health in 
     scale_fill_manual(values = palette) +
     labs(
       title = "Self-Rated Mental Health by Age Group (Females)",
-      subtitle = "Newfoundland and Labrador",
+      subtitle = "Newfoundland and Labrador (2005)",
       x = "Age Group",
       y = "Number of Persons",
       fill = "Mental Health"

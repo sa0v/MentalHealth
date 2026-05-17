@@ -1,0 +1,87 @@
+---
+title: "Mental Health in Canada"
+author: "John W"
+format: html
+editor: visual
+---
+
+# Introduction
+
+# Analysis
+
+## How have Canadians self-rated their own mental health over time?
+
+```{r}
+#| echo: false
+#| message: false
+  library(tidyverse)
+  library(janitor)
+  library(viridis)
+
+  # Data loading/tidying section
+  options(scipen=999)
+  data <- read.csv("13100465.csv")
+  data <- data |>
+    clean_names() |>
+    filter(
+      age_group != "Total, 15 years and over",
+      gender != "Total, gender of person",
+      characteristics == "Number of persons",
+      indicators == "Perceived mental health, very good or excellent" |
+        indicators == "Perceived mental health, good" |
+        indicators == "Perceived mental health, fair or poor",
+      geo == "Canada",
+      age_group != "25 to 64 years"
+    ) |>
+    mutate(
+      # Remove + from end of gender strings
+      gender = str_remove(gender, "\\+$"),
+      # Remove prefix from indicators
+      indicators = str_remove(indicators, "^Perceived mental health, "),
+      age_group = factor(
+        age_group,
+         levels = c("15 to 24 years","25 to 44 years","45 to 64 years","65 years and over"),
+         ordered=TRUE
+      ),
+      indicators = factor(
+        indicators,
+        levels = c("fair or poor","good","very good or excellent"),
+        ordered=TRUE
+      )
+    )
+  
+  df <- data
+  
+  # Plotting section
+  df <- data |>
+  group_by(age_group, indicators, gender) |>
+  summarize(
+    mean_value = mean(value, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  ggplot(aes(x = age_group, y = mean_value, fill = indicators)) +
+  geom_col(position = "dodge") +
+  scale_y_continuous(labels = scales::comma) +
+  scale_fill_viridis_d(name = "Mental Health Rating") +
+  labs(
+    title = "Average Mental Health Ratings by Age Group",
+    subtitle = "Canada (Average Across 2002, 2012, and 2022)",
+    x = "Age Group",
+    y = "Average Number of Persons"
+  ) +
+  facet_wrap(~gender) +
+  coord_flip() +
+  theme_minimal() +
+  theme(
+    panel.spacing = unit(2, "lines"),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+  
+  df
+```
+
+This bar chart shows the average number of Canadians reporting different levels of perceived mental health across age groups, separated by gender. The bars represent the average across 2002, 2012 and 2022. Across age groups and genders, "very good or excellent" mental health is the most common rating, with the bars for this rating the longest in every panel. "Fair or poor" mental health was the least commonly reported across age groups and genders, indicating that the majority of respondents for each year generally had a positive outlook on their mental health. The 15 to 24 years and 65 years and over age groups had noticeably lower averages than the middle-aged groups (25 to 44 and 45 to 64), which were considerably more strongly represented. Women report slightly higher average counts across mental health categories and age groups than men. For every age group the gap between "very good or excellent" and "fair or poor" mental health is substantial; this suggests that most respondents perceive their mental health positively.
+
+# Conclusion
+
+Most Canadians across all age groups and genders reported positive mental health. "Very good or excellent" mental health was consistently the most common rating, with "fair or poor" mental health being the least frequently reported category. Middle-aged groups had the strongest representation with the highest average counts across mental health ratings. Younger adults and seniors were comparatively underrepresented, with lower average counts overall. Women generally reported slightly higher average counts than men across all categories. Large differences between positive and negative mental health rating suggest an overall positive perception of mental health in Canada from 2002-2022.

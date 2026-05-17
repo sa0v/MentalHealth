@@ -1,6 +1,6 @@
-# Mental Health in Newfoundland and Labrador
+# Mental Health in Canada
 
-This notebook analyzes a dataset from 2005 on the self-reported mental health of Canadian citizens. It is available from the Government of Canada [here.](https://open.canada.ca/data/en/dataset/480a161e-56c6-4a86-869c-e38381b329a5) The purpose of this notebook is to determine how the people of Newfoundland and Labrador rate their own mental health.
+This notebook utilizes a dataset published by the Government of Canada [here.](https://open.canada.ca/data/en/dataset/a9863f45-6a1a-4277-ae0f-2d9cb61d413a) The objective of this notebook is to determine how Canadians have self-rated their own mental health over time. This may provide insight into the need for mental health services in the country.
 
 # License
 

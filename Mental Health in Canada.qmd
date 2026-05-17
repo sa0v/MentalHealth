@@ -61,7 +61,7 @@ This notebook utilizes a dataset published by the Government of Canada [here.](h
     mean_value = mean(value, na.rm = TRUE),
     .groups = "drop"
   ) |>
-  ggplot(aes(x = age_group, y = mean_value, fill = indicators)) +
+  ggplot(aes(x = fct_rev(age_group), y = mean_value, fill = indicators)) +
   geom_col(position = "dodge") +
   scale_y_continuous(labels = scales::comma) +
   scale_fill_viridis_d(name = "Mental Health Rating") +
